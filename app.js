@@ -1,23 +1,35 @@
 var express = require('express');
+
 var app = express();
 app.listen(process.env.PORT || 8000);
 
 app.configure(function(){
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.bodyParser());
+	app.use(express.bodyParser());
+  	app.use(express.static(__dirname + '/public'));
 });
 
 var im = require('imagemagick');
 
-// im.readMetadata('/images/84.jpg', function(err, metadata){
-//   if (err) throw err;
-//   console.log('Shot at '+metadata.exif.dateTimeOriginal);
-// })
+app.get('/', function (req, res) {
+	im.identify('public/images/84.jpg', function(err, features){
+		if (err) throw err;
+		res.send(features);
+		
+	});
+})
 
-im.identify('/public/images/84.jpg', function(err, features){
-  if (err) throw err;
-  console.log(features);
-  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
-});
+app.get('/resize', function (req, res) {
+	im.resize({
+		srcPath: 'public/images/84.jpg',
+		dstPath: 'public/images/84-small.png',
+		format: 'png',
+		width: 50
+	}, function(err, stdout, stderr){
+	  	if (err) throw err;
+	  	res.send('<img src="/images/84-small.png">');
+	});
+})
+
+
 
 
