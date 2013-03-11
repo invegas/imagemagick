@@ -23,7 +23,7 @@ app.get('/resize', function (req, res) {
 		srcPath: 'public/images/84.jpg',
 		dstPath: 'public/images/84-small.png',
 		format: 'png',
-		width: 50
+		width: 500
 	}, function(err, stdout, stderr){
 	  	if (err) throw err;
 	  	res.send('<img src="/images/84-small.png">');
